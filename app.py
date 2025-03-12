@@ -8,11 +8,9 @@ CORS(app, resources={r"/api/*": {"origins": "https://samyakjain-1.github.io"}})
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-@app.route("/", methods=["GET"])
-def home():
-    return "✅ Mental Health Chatbot API is running!"
 
-@app.route("/api/chat", methods=["POST"])
+
+@app.route("/", methods=["POST"])
 def proxy_to_groq():
     try:
         user_data = request.get_json()
