@@ -24,7 +24,10 @@
 <body class="bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 text-gray-900 min-h-screen flex flex-col">
     <header class="bg-white/70 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 shadow-md text-center py-6 relative">
       <h1 class="text-3xl font-extrabold text-primary dark:text-accent tracking-tight">Mental Health Chatbot</h1>
-      <p class="text-sm text-secondary dark:text-gray-400 mt-1">Powered by GROQ</p>
+      <div class="flex items-center justify-center mt-2 gap-2">
+        <p class="text-sm text-secondary dark:text-gray-400">Powered by</p>
+        <img src="./images/groq.jpg" alt="Powered by GROQ" class="h-5 object-contain" />
+      </div>
       <button onclick="toggleDarkMode()" class="absolute top-4 right-4 bg-gray-200 dark:bg-gray-700 p-2 rounded-full hover:shadow transition" aria-label="Toggle Theme">
         <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
           <path id="themeIconPath" d="M10 2a8 8 0 100 16 8 8 0 000-16zM10 4a6 6 0 110 12 6 6 0 010-12z" />
