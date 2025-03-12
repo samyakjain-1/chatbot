@@ -4,15 +4,20 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all origins
+CORS(app)
 
-# Load your Groq API key from environment variables
-GROQ_API_KEY = "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"
+# Load Groq API key from environment variable
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+@app.route("/", methods=["GET"])
+def home():
+    return "✅ Mental Health Chatbot API is running."
 
 @app.route("/api/chat", methods=["POST"])
 def proxy_to_groq():
     try:
         user_data = request.get_json()
+        print("📩 Incoming Message:", user_data)
 
         headers = {
             "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -22,24 +27,25 @@ def proxy_to_groq():
         payload = {
             "model": "llama-3.3-70b-versatile",
             "messages": [
-                { "role": "system", "content": "You are a warm and empathetic mental health support chatbot." },
-                { "role": "user", "content": user_data.get("message", "") }
+                {"role": "system", "content": "You are a warm and empathetic mental health support chatbot."},
+                {"role": "user", "content": user_data.get("message", "")}
             ]
         }
 
-        response = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers=headers,
-            json=payload
-        )
+        print("📤 Sending payload to GROQ API...")
+        response = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
+        print("✅ Received response from GROQ API")
 
         groq_response = response.json()
         bot_reply = groq_response["choices"][0]["message"]["content"]
+        print("💬 Bot Reply:", bot_reply)
 
-        return jsonify({ "reply": bot_reply })
+        return jsonify({"reply": bot_reply})
 
     except Exception as e:
-        return jsonify({ "error": str(e) }), 500
+        print("❌ ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
+    print("🚀 Starting Flask server...")
     app.run(debug=True)
