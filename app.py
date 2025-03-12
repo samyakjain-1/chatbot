@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all origins
 
 # Load your Groq API key from environment variables
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = "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"
 
 @app.route("/api/chat", methods=["POST"])
 def proxy_to_groq():
