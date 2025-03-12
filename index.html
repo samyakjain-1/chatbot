@@ -42,6 +42,10 @@
     <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 self-end pr-2" id="charCount">0 / 300</p>
   </div>
 
+  <footer class="text-center text-sm text-gray-500 dark:text-gray-400 py-4">
+    Made by Samyak <span class="inline-block align-middle">🚀</span> &copy; 2025
+  </footer>
+
   <script>
     const backendUrl = "https://chatbot-5pbp.onrender.com/api/chat";
 
@@ -59,6 +63,11 @@
       const input = document.getElementById("userInput");
       const counter = document.getElementById("charCount");
       counter.textContent = `${input.value.length} / 300`;
+    }
+
+    function scrollToBottom() {
+      const chat = document.getElementById("chat");
+      chat.scrollTop = chat.scrollHeight;
     }
 
     async function sendMessage() {
