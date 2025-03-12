@@ -4,43 +4,42 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "https://samyakjain-1.github.io"}})
+CORS(app, resources={r\"/api/*\": {\"origins\": \"https://samyakjain-1.github.io\"}})
 
+GROQ_API_KEY = os.getenv(\"GROQ_API_KEY\")
 
-# Load your Groq API key from environment variables
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+@app.route(\"/\", methods=[\"GET\"])
+def home():
+    return \"✅ Mental Health Chatbot API is running!\"
 
-@app.route("/api/chat", methods=["POST"])
+@app.route(\"/api/chat\", methods=[\"POST\"])
 def proxy_to_groq():
     try:
         user_data = request.get_json()
+        print(\"📩 Incoming Message:\", user_data)
 
         headers = {
-            "Authorization": f"Bearer {GROQ_API_KEY}",
-            "Content-Type": "application/json"
+            \"Authorization\": f\"Bearer {GROQ_API_KEY}\",
+            \"Content-Type\": \"application/json\"
         }
 
         payload = {
-            "model": "llama-3.3-70b-versatile",
-            "messages": [
-                { "role": "system", "content": "You are a warm and empathetic mental health support chatbot." },
-                { "role": "user", "content": user_data.get("message", "") }
+            \"model\": \"llama-3.3-70b-versatile\",
+            \"messages\": [
+                {\"role\": \"system\", \"content\": \"You are a warm and empathetic mental health support chatbot.\"},
+                {\"role\": \"user\", \"content\": user_data.get(\"message\", \"\")}
             ]
         }
 
-        response = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers=headers,
-            json=payload
-        )
-
+        response = requests.post(\"https://api.groq.com/openai/v1/chat/completions\", headers=headers, json=payload)
         groq_response = response.json()
-        bot_reply = groq_response["choices"][0]["message"]["content"]
 
-        return jsonify({ "reply": bot_reply })
+        reply = groq_response[\"choices\"][0][\"message\"][\"content\"]
+        return jsonify({\"reply\": reply})
 
     except Exception as e:
-        return jsonify({ "error": str(e) }), 500
+        print(\"❌ ERROR:\", e)
+        return jsonify({\"error\": str(e)}), 500
 
-if __name__ == "__main__":
+if __name__ == \"__main__\":
     app.run(debug=True)
