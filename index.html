@@ -22,23 +22,18 @@
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body
-    class="bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 text-gray-900 min-h-screen flex flex-col">
-    <header
-        class="bg-white/70 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 shadow-md text-center py-6 relative">
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 text-gray-900 min-h-screen flex flex-col">
+    <header class="bg-white/70 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 shadow-md text-center py-6 relative">
         <h1 class="text-3xl font-extrabold text-primary dark:text-accent tracking-tight">Mental Health Chatbot</h1>
         <div class="flex items-center justify-center mt-2 gap-2">
             <p class="text-sm text-secondary dark:text-gray-400">Powered by</p>
             <a href="https://groq.com/" target="_blank"><img src="./images/groq.jpg" alt="Powered by GROQ" class="h-5 object-contain"></a>
         </div>
-        <button onclick="toggleDarkMode()"
-            class="absolute top-4 right-4 bg-gray-200 dark:bg-gray-700 p-2 rounded-full hover:shadow transition"
-            aria-label="Toggle Theme">
-            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor"
-                viewBox="0 0 20 20">
+        <button onclick="toggleDarkMode()" class="absolute top-4 right-4 bg-gray-200 dark:bg-gray-700 p-2 rounded-full hover:shadow transition" aria-label="Toggle Theme">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                 <path id="themeIconPath" d="M10 2a8 8 0 100 16 8 8 0 000-16zM10 4a6 6 0 110 12 6 6 0 010-12z" />
             </svg>
         </button>
@@ -48,139 +43,21 @@
         <div id="chat" class="h-full overflow-y-auto space-y-4 pr-2" onscroll="handleChatScroll()"></div>
     </div>
 
-
-    <div
-        class="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-300 dark:border-gray-700 px-4 py-4 flex flex-col items-center justify-center shadow-inner sticky bottom-0 z-40">
+    <div class="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-300 dark:border-gray-700 px-4 py-4 flex flex-col items-center justify-center shadow-inner sticky bottom-0 z-40">
         <div class="w-full flex items-center justify-center">
-            <textarea id="userInput" maxlength="300" placeholder="Type your message..." rows="1"
-                class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm resize-none"
-                onkeydown="handleKeyPress(event)" oninput="updateCharCount()"></textarea>
-            <button onclick="sendMessage()"
-                class="ml-4 bg-primary hover:bg-indigo-700 text-white px-5 py-3 rounded-full font-semibold text-sm transition-all shadow-md">Send</button>
+            <textarea id="userInput" maxlength="300" placeholder="Type your message..." rows="1" class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm resize-none" onkeydown="handleKeyPress(event)" oninput="updateCharCount()"></textarea>
+            <button onclick="sendMessage()" class="ml-4 bg-primary hover:bg-indigo-700 text-white px-5 py-3 rounded-full font-semibold text-sm transition-all shadow-md">Send</button>
         </div>
         <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 self-end pr-2" id="charCount">0 / 300</p>
     </div>
 
-    <button id="scrollToBottomBtn"
-        class="scroll-button bg-primary hover:bg-indigo-700 text-white px-4 py-2 rounded-full shadow-lg text-sm"
-        onclick="scrollToBottom()">Scroll to Bottom</button>
+    <button id="scrollToBottomBtn" class="scroll-button bg-primary hover:bg-indigo-700 text-white px-4 py-2 rounded-full shadow-lg text-sm" onclick="scrollToBottom()">Scroll to Bottom</button>
 
     <footer class="text-center text-sm text-gray-500 dark:text-gray-400 py-4">
         Made by Samyak <span class="inline-block align-middle">🚀</span> &copy; 2025
     </footer>
 
-    <script>
-        const backendUrl = "https://chatbot-5pbp.onrender.com/api/chat";
-        let bannedWords = [];
-
-        fetch("https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en")
-            .then(response => response.text())
-            .then(text => {
-                bannedWords = text.split("\n").map(w => w.trim().toLowerCase()).filter(w => w);
-            });
-
-        function containsBannedWords(message) {
-            const lowerMsg = message.toLowerCase();
-            return bannedWords.some(word => lowerMsg.includes(word));
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                const input = document.getElementById("userInput");
-                if (input.value.trim() !== "") {
-                    sendMessage();
-                }
-            }
-        }
-
-        function updateCharCount() {
-            const input = document.getElementById("userInput");
-            const counter = document.getElementById("charCount");
-            counter.textContent = `${input.value.length} / 300`;
-        }
-
-        function scrollToBottom() {
-            const chat = document.getElementById("chat");
-            setTimeout(() => {
-                chat.scrollTop = chat.scrollHeight;
-            }, 10);
-        }
-
-
-        function handleChatScroll() {
-            const chat = document.getElementById("chat");
-            const scrollBtn = document.getElementById("scrollToBottomBtn");
-            if (chat.scrollTop + chat.clientHeight < chat.scrollHeight - 100) {
-                scrollBtn.style.display = "block";
-            } else {
-                scrollBtn.style.display = "none";
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById("userInput");
-            const chat = document.getElementById("chat");
-            const userMessage = input.value.trim();
-            if (!userMessage) return;
-
-            if (containsBannedWords(userMessage)) {
-                const warningDiv = document.createElement("div");
-                warningDiv.className = "bg-yellow-100 dark:bg-yellow-700 text-yellow-800 dark:text-yellow-100 self-center rounded-xl px-4 py-3 max-w-[75%] shadow-md animate-fade-in text-center";
-                warningDiv.textContent = "⚠️ Message contains inappropriate language. Please revise.";
-                chat.appendChild(warningDiv);
-                scrollToBottom();
-                return;
-            }
-
-            const userDiv = document.createElement("div");
-            userDiv.className = "bg-primary text-white self-end rounded-2xl px-4 py-3 max-w-[75%] ml-auto shadow-md animate-fade-in";
-            userDiv.textContent = userMessage;
-            chat.appendChild(userDiv);
-            input.value = "";
-            updateCharCount();
-            scrollToBottom();
-
-            try {
-                const response = await fetch(backendUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: userMessage })
-                });
-
-                const data = await response.json();
-                const botMessage = data.reply;
-
-                const botDiv = document.createElement("div");
-                botDiv.className = "bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-200 dark:border-gray-600 text-gray-800 self-start rounded-2xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
-                botDiv.textContent = botMessage;
-                chat.appendChild(botDiv);
-                scrollToBottom();
-            } catch (err) {
-                const errorDiv = document.createElement("div");
-                errorDiv.className = "bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-100 self-start rounded-xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
-                errorDiv.textContent = "⚠️ Error connecting to chatbot.";
-                chat.appendChild(errorDiv);
-                scrollToBottom();
-            }
-        }
-
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            html.classList.toggle("dark");
-            const iconPath = document.getElementById("themeIconPath");
-            const isDark = html.classList.contains("dark");
-            iconPath.setAttribute("d", isDark
-                ? "M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-                : "M10 2a8 8 0 100 16 8 8 0 000-16zM10 4a6 6 0 110 12 6 6 0 010-12z");
-        }
-
-        window.onload = () => {
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            if (prefersDark) document.documentElement.classList.add("dark");
-            scrollToBottom();
-        }
-    </script>
+    <script src="js/script.js"></script>
     <style>
         .animate-fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -191,7 +68,6 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(0);
