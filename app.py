@@ -10,7 +10,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 
 
-@app.route("/", methods=["POST"])
+@app.route("/", methods=["GET"])
 def proxy_to_groq():
     try:
         user_data = request.get_json()
