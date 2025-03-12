@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -18,22 +19,47 @@
       }
     }
   </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen flex flex-col">
-  <header class="bg-white/70 backdrop-blur-md border-b border-gray-300 shadow-md text-center py-6">
-    <h1 class="text-3xl font-extrabold text-primary tracking-tight">Mental Health Chatbot</h1>
-    <p class="text-sm text-secondary mt-1">Powered by GROQ</p>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 dark:text-gray-100 text-gray-900 min-h-screen flex flex-col">
+    <header class="bg-white/70 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 shadow-md text-center py-6 relative">
+      <h1 class="text-3xl font-extrabold text-primary dark:text-accent tracking-tight">Mental Health Chatbot</h1>
+      <p class="text-sm text-secondary dark:text-gray-400 mt-1">Powered by GROQ</p>
+      <button onclick="toggleDarkMode()" class="absolute top-4 right-4 bg-gray-200 dark:bg-gray-700 p-2 rounded-full hover:shadow transition" aria-label="Toggle Theme">
+        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <path id="themeIconPath" d="M10 2a8 8 0 100 16 8 8 0 000-16zM10 4a6 6 0 110 12 6 6 0 010-12z" />
+        </svg>
+      </button>
   </header>
 
   <div class="flex-grow max-w-3xl w-full mx-auto px-4 py-6 space-y-4 overflow-y-auto" id="chat"></div>
 
-  <div class="w-full bg-white/80 backdrop-blur-md border-t border-gray-300 px-4 py-4 flex items-center justify-center shadow-inner">
-    <input type="text" id="userInput" placeholder="Type your message..." class="flex-1 border border-gray-300 rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm">
-    <button onclick="sendMessage()" class="ml-4 bg-primary hover:bg-indigo-700 text-white px-5 py-3 rounded-full font-semibold text-sm transition-all shadow-md">Send</button>
+  <div class="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-300 dark:border-gray-700 px-4 py-4 flex flex-col items-center justify-center shadow-inner">
+    <div class="w-full flex items-center justify-center">
+      <textarea id="userInput" maxlength="300" placeholder="Type your message..." rows="1" class="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm resize-none" onkeydown="handleKeyPress(event)" oninput="updateCharCount()"></textarea>
+      <button onclick="sendMessage()" class="ml-4 bg-primary hover:bg-indigo-700 text-white px-5 py-3 rounded-full font-semibold text-sm transition-all shadow-md">Send</button>
+    </div>
+    <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 self-end pr-2" id="charCount">0 / 300</p>
   </div>
 
   <script>
-    const backendUrl = "https://chatbot-5pbp.onrender.com/api/chat"; // Replace with your actual backend URL //TODO
+    const backendUrl = "https://chatbot-5pbp.onrender.com/api/chat";
+
+    function handleKeyPress(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        const input = document.getElementById("userInput");
+        if (input.value.trim() !== "") {
+          sendMessage();
+        }
+      }
+    }
+
+    function updateCharCount() {
+      const input = document.getElementById("userInput");
+      const counter = document.getElementById("charCount");
+      counter.textContent = `${input.value.length} / 300`;
+    }
 
     async function sendMessage() {
       const input = document.getElementById("userInput");
@@ -46,6 +72,7 @@
       userDiv.textContent = userMessage;
       chat.appendChild(userDiv);
       input.value = "";
+      updateCharCount();
 
       try {
         const response = await fetch(backendUrl, {
@@ -55,19 +82,33 @@
         });
 
         const data = await response.json();
+        console.log("🔍 Raw response from backend:", data);
+
         const botMessage = data.reply;
 
         const botDiv = document.createElement("div");
-        botDiv.className = "bg-white border border-gray-200 text-gray-800 self-start rounded-2xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
+        botDiv.className = "bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-200 dark:border-gray-600 text-gray-800 self-start rounded-2xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
         botDiv.textContent = botMessage;
         chat.appendChild(botDiv);
         chat.scrollTop = chat.scrollHeight;
       } catch (err) {
+        console.error("❌ Fetch Error:", err);
         const errorDiv = document.createElement("div");
-        errorDiv.className = "bg-red-100 text-red-700 self-start rounded-xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
+        errorDiv.className = "bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-100 self-start rounded-xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
         errorDiv.textContent = "⚠️ Error connecting to chatbot.";
         chat.appendChild(errorDiv);
       }
+    }
+
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      html.classList.toggle("dark");
+    }
+
+    // Auto-apply based on system preference
+    window.onload = () => {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (prefersDark) document.documentElement.classList.add("dark");
     }
   </script>
   <style>
