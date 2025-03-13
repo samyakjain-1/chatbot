@@ -7,6 +7,11 @@ fetch("https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-a
         bannedWords = text.split("\n").map(w => w.trim().toLowerCase()).filter(w => w);
     });
 
+function containsBannedWords(message) {
+    const lowerMsg = message.toLowerCase();
+    return bannedWords.some(word => lowerMsg.includes(word));
+}
+
 function handleKeyPress(event) {
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
