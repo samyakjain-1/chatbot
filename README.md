@@ -1,21 +1,28 @@
 # 🧠 Mental Health Chatbot
 
-A responsive, user-friendly AI-powered chatbot interface designed to provide emotional support and mental wellness conversations in a safe and interactive way.
+A beautifully designed, AI-powered mental health chatbot web app aimed at offering emotional support through safe and empathetic conversations. Built with a modern tech stack and responsive interface, this chatbot encourages users to engage in thoughtful conversations in a comfortable environment.
 
-This web-based application connects users with a backend chatbot API powered by GROQ, with built-in sentiment-aware interactions and content moderation to ensure a respectful environment.
+![App Preview](./images/preview.png)
 
-## 🌟 Features
+---
 
-- ✨ **Responsive UI with TailwindCSS**
-- 🌙 **Dark Mode Toggle**
-- 💬 **Conversational Chat Interface**
-- 🚫 **Profanity Filtering**
-- 📏 **Character Counter (Max 300)**
-- 📱 **Mobile-friendly and Smooth Scroll UI**
-- 📡 **Integrated with backend chatbot API**
-- ⚡ **Scroll-to-bottom button for long chats**
+## ✨ Features
 
-## 🖼️ Preview
-![Chat UI Preview](./images/preview.png)
+- 🎨 Clean and Responsive UI using Tailwind CSS
+- 🌙 Dark Mode Toggle for better accessibility
+- 💬 Chat interface with smooth animations
+- ✍️ Character limit counter (Max 300 characters)
+- 🚫 Profanity filtering using an open-source bad words list
+- 📩 Scroll-to-bottom button for longer chat sessions
+- ⚡ Seamless integration with a backend chatbot API (GROQ-powered)
 
-## 📁 Project Structure
+---
+
+## 🔧 Technologies Used
+
+- **Frontend**: HTML, CSS, JavaScript
+- **Styling**: Tailwind CSS, Custom CSS
+- **Backend**: Flask (Python)
+- **Hosting (API)**: Render.com
+
+---
