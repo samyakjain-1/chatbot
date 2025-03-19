@@ -80,7 +80,7 @@ async function sendMessage() {
 
         const botDiv = document.createElement("div");
         botDiv.className = "bg-white dark:bg-gray-700 dark:text-gray-100 border border-gray-200 dark:border-gray-600 text-gray-800 self-start rounded-2xl px-4 py-3 max-w-[75%] mr-auto shadow-md animate-fade-in";
-        botDiv.innerHTML = marked.parse(botMessage);
+        botDiv.innerHTML = botMessage.replace(/\n/g, "<br>");
         chat.appendChild(botDiv);
         scrollToBottom();
     } catch (err) {
