@@ -8,12 +8,12 @@ CORS(app, resources={r"/api/*": {"origins": "https://samyakjain-1.github.io"}})
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# ✅ Simple GET home route for Render testing
+#GET
 @app.route("/", methods=["GET"])
 def home():
-    return "✅ Mental Health Chatbot API is running!"
+    return "Mental Health Chatbot API is running!"
 
-# ✅ Actual chatbot logic (POST only)
+#POST
 @app.route("/api/chat", methods=["POST"])
 def proxy_to_groq():
     try:
@@ -33,20 +33,20 @@ def proxy_to_groq():
             ]
         }
 
-        print("📤 Sending payload to GROQ API...")
+        print("Sending payload to GROQ API...")
         response = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
-        print("✅ Received response from GROQ API")
+        print("Received response from GROQ API")
 
         groq_response = response.json()
         reply = groq_response["choices"][0]["message"]["content"]
-        print("💬 Bot Reply:", reply)
+        print("Bot Reply:", reply)
 
         return jsonify({"reply": reply})
 
     except Exception as e:
-        print("❌ ERROR:", str(e))
+        print("ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    print("🚀 Starting Flask server...")
+    print("Starting Flask server...")
     app.run(debug=True)
