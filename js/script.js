@@ -1,4 +1,4 @@
-const backendUrl = "https://chatbot-5pbp.onrender.com/api/chat";
+const backendUrl = "https://chatbot-1-oa9n.onrender.com/api/chat";
 let bannedWords = [];
 
 fetch("https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en")

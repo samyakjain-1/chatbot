@@ -48,5 +48,6 @@ def proxy_to_groq():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    print("Starting Flask server...")
-    app.run(debug=True)
+    port = int(os.getenv("PORT", 5000))  # Use the PORT environment variable or default to 5000
+    print(f"Starting Flask server on port {port}...")
+    app.run(host="0.0.0.0", port=port, debug=True)
